@@ -18,8 +18,17 @@ const API_TOKEN = process.env.API_TOKEN;
 const ESPN_BASE = 'https://site.web.api.espn.com';
 const CORE_BASE = 'https://sports.core.api.espn.com';
 
-// CORS middleware
-app.use(cors());
+// Explicit CORS options
+const corsOptions = {
+    origin: 'https://sidelinemetrics.com', // Allow only your frontend domain
+    optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions)); // Apply these options to NORMAL requests
+
+// Explicitly handle PREFLIGHT requests for ALL routes
+app.options('*', cors(corsOptions));
+
 
 // ✅ GET Teams (Off-Tackle)
 app.get('/api/teams', async (req, res) => {
